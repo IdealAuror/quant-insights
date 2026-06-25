@@ -209,6 +209,51 @@
   </div>
 </div>
 
+  <h3>5. T+1 改革：完美的因果识别实验</h3>
+  <div class="card highlight">
+    <p>论文找到了一个<strong>因果识别的自然实验</strong>。2024年5月28日，SEC 将美股结算周期从 T+2 缩短为 T+1。</p>
+    <p style="margin-top:10px;">如果 PreTOM 的输家抛压确实源于结算时间约束，那么改革后，卖出窗口应该向月末方向移动一天——因为投资者多了一天缓冲。</p>
+    <table style="margin-top:12px;">
+      <tr><th></th><th>改革前</th><th>改革后</th><th>差异</th></tr>
+      <tr><td>输家最大抛压日</td><td><strong>T-4</strong></td><td><strong>T-3</strong></td><td>平移1天</td></tr>
+      <tr><td>T-4 收益</td><td class="negative">极度负面</td><td>消失</td><td class="sig">84.7 bps（t=2.80）</td></tr>
+    </table>
+    <p style="margin-top:10px;">三重差分设计（输家 vs 赢家 × 改革前 vs 改革后 × 目标日 vs 控制日）：<strong>196 bps</strong>（t = 2.20）。</p>
+    <p style="margin-top:10px; color:var(--muted);"><strong>意义：</strong>SEC 改变了一个管道规则，动量策略的微观时间结构就跟着移动了一天。行为偏差或风险溢价无法解释这种位移——它们不会因为结算规则变化而平移。</p>
+  </div>
+
+  <h3>6. 短期反转与长期反转</h3>
+  <div class="card">
+    <p>如果输家在 PreTOM 期间的下跌是<strong>流动性压力</strong>而非基本面恶化，那么压力消退后价格应该回弹。确实如此。</p>
+    <p style="margin-top:10px;">在 PreTOM 结束后的 7 天 Post 窗口 [T-3, T+3]，输家相对非输家的超额负收益<strong>回收了约 70%</strong>。</p>
+    <p style="margin-top:10px;">但剩余的 30% 不会立即回来。因为动量十分位分组具有粘性，连续留在输家组的股票会月复一月地积累 PreTOM 压力。这些积累的压力在更长的时间尺度上缓慢回归——部分回归要等到股票退出输家组之后才会实现。</p>
+    <p style="margin-top:10px; color:var(--muted);">这恰好为 Jegadeesh 和 Titman（1993）发现的<strong>"动量长期反转"</strong>现象提供了微观解释。</p>
+  </div>
+
+  <h3>7. 崩盘发生在月初，不在 PreTOM</h3>
+  <div class="card success">
+    <p>一个自然的疑问：既然 PreTOM 贡献了动量的绝大部分利润，那动量崩盘（momentum crash）是否也集中在这六天？如果是，这些利润或许只是承担了尾部风险的补偿。</p>
+    <p style="margin-top:10px;">论文给出了明确的回答：<strong>崩盘发生在月初（T+1 到 T+3），不在 PreTOM 窗口。</strong></p>
+    <table style="margin-top:10px;">
+      <tr><th>窗口</th><th>崩盘天占比</th><th>日历占比</th><th>z 值</th></tr>
+      <tr><td>PreTOM [T-9, T-4]</td><td>30.8%</td><td>33.3%</td><td>-1.32（不显著）</td></tr>
+      <tr><td>月初 [T+1, T+3]</td><td class="sig">显著偏高</td><td>—</td><td>显著</td></tr>
+    </table>
+    <p style="margin-top:10px;"><strong>利润窗口和崩盘窗口在时间上是分离的——PreTOM 的动量利润不是崩盘避险的报酬。</strong></p>
+  </div>
+
+  <h3>8. 19 个发达市场的全球验证</h3>
+  <div class="card">
+    <p>论文在 19 个发达市场做了同样的检验（Compustat Global 数据，1990-2025）。控制国家固定效应后：</p>
+    <ul style="padding-left:18px; margin-top:10px;">
+      <li>输家在 PreTOM 期间每天比月内其他时段多跑输市场 <strong>4.48 bps</strong>（t = -4.46）</li>
+      <li>赢家无显著差异</li>
+      <li>效应最强：<strong>挪威</strong>（-11.37 bps）、<strong>荷兰</strong>（-10.57 bps）、<strong>香港</strong>（-8.94 bps）</li>
+    </ul>
+    <p style="margin-top:12px;"><strong>唯一的例外是日本。</strong>在日本市场，过去的输家反而倾向于反弹，赢家倾向于回落——动量因子长期为负。既然日本的动量方向本身就是反的，那么输家在 PreTOM 表现略好而非更差，<strong>恰恰从反面印证了同一套机制</strong>。</p>
+  </div>
+</div>
+
 <!-- ==================== 月内时钟 ==================== -->
 <div class="section">
   <h2>A股月内时钟</h2>
@@ -278,7 +323,16 @@
       <li style="margin-bottom:12px;"><strong>A股的抛售是脉冲式的</strong>，集中在 T-6 和 T-5 两天，而非美股的渐进式。这与 A 股 T+1 结算制度有关。</li>
       <li style="margin-bottom:12px;"><strong>T+1 反弹是市场效应</strong>（beta），不是输家专属修复（alpha）。赢家反弹幅度更大。</li>
       <li style="margin-bottom:12px;"><strong>实际意义</strong>：避免在月末倒数第 5-6 天持有输家股；PreTOM 结束后（T-3 起）输家可能出现短期反弹机会。</li>
+      <li style="margin-bottom:12px;"><strong>崩盘与利润分离</strong>——PreTOM 利润不是尾部风险补偿。</li>
+      <li style="margin-bottom:12px;"><strong>全球 19 个市场验证一致</strong>，日本反面印证机制。</li>
     </ol>
+  </div>
+
+  <h3>三个深层启发</h3>
+  <div class="card info">
+    <p><strong>第一，动量因子的"时间地址"被精确定位了。</strong> 传统上我们认为动量是一个月度频率的异象——过去12个月的赢家未来继续跑赢。但 Nathan 等人告诉我们，月度的平均值掩盖了极端的月内集中。如果你的投资组合在每月这六天恰好没有持仓（比如因为调仓时机不对），你可能在不知不觉中错失了大部分动量溢价。</p>
+    <p style="margin-top:12px;"><strong>第二，这个发现和传统的月历效应构成了一幅完整的月内时钟图。</strong> 下半月前段（T-9 到 T-4）是输家被集中抛售的时段，动量策略获利；月末到月初（T-1 到 T+3）是市场整体先被压低后反弹的时段。两个效应都源于月末机构的现金管理需求，但作用机制不同：前者是横截面效应（输家 vs 赢家），后者是市场整体效应。</p>
+    <p style="margin-top:12px;"><strong>第三，它重新定义了动量的"本质"。</strong> 三十年来，动量的解释在行为偏差（投资者反应不足）和风险补偿（承担了某种系统性风险）之间摇摆。Nathan 等人提出第三种可能：动量或许只是市场微观结构的副产品——结算制度、月末支付义务、机构的现金管理习惯，这些"管道"层面的东西共同塑造了我们观察到的动量收益。</p>
   </div>
 
   <blockquote>

@@ -122,6 +122,50 @@
   </div>
 
   <div class="img-wrap"><img src="cumulative_curve.png" alt="Cumulative"><div class="caption">Fig 4: Loser/Winner cumulative returns + WML curve</div></div>
+
+  <h3>5. T+1 Settlement Reform: A Perfect Natural Experiment</h3>
+  <div class="card highlight">
+    <p>The paper identifies a <strong>causal natural experiment</strong>. On May 28, 2024, the SEC shortened the US settlement cycle from T+2 to T+1.</p>
+    <p style="margin-top:10px">If PreTOM loser selling is driven by settlement timing constraints, the selling window should shift one day closer to month-end after reform.</p>
+    <table style="margin-top:12px">
+      <tr><th></th><th>Pre-Reform</th><th>Post-Reform</th><th>Difference</th></tr>
+      <tr><td>Peak loser selling day</td><td><strong>T-4</strong></td><td><strong>T-3</strong></td><td>Shifted 1 day</td></tr>
+      <tr><td>T-4 return</td><td class="negative">Extremely negative</td><td>Vanished</td><td class="sig">84.7 bps (t=2.80)</td></tr>
+    </table>
+    <p style="margin-top:10px">Triple-diff (losers vs winners × pre vs post × target vs control): <strong>196 bps</strong> (t = 2.20).</p>
+    <p style="margin-top:10px;color:var(--muted)"><strong>Implication:</strong> SEC changed one plumbing rule, and momentum's microstructure shifted by exactly one day. Behavioral biases or risk premiums cannot explain this displacement.</p>
+  </div>
+
+  <h3>6. Short-Term Reversal & Long-Term Reversal</h3>
+  <div class="card">
+    <p>If loser declines during PreTOM reflect <strong>liquidity pressure</strong> (not fundamental deterioration), prices should rebound after pressure fades. They do.</p>
+    <p style="margin-top:10px">In the 7-day Post window [T-3, T+3], losers' excess negative return <strong>recovers ~70%</strong>.</p>
+    <p style="margin-top:10px">The remaining 30% doesn't return immediately. Momentum decile groupings are sticky — stocks stuck in the loser bucket accumulate month-over-month PreTOM pressure, which unwinds slowly over longer horizons.</p>
+    <p style="margin-top:10px;color:var(--muted)">This provides a micro-foundations explanation for the <strong>"momentum long-term reversal"</strong> documented by Jegadeesh & Titman (1993).</p>
+  </div>
+
+  <h3>7. Crashes Happen at Month-Start, Not in PreTOM</h3>
+  <div class="card success">
+    <p>A natural question: since PreTOM generates most momentum profits, do crashes also concentrate there? If so, profits might just be compensation for tail risk.</p>
+    <p style="margin-top:10px">The paper gives a clear answer: <strong>crashes occur at month-start (T+1 to T+3), not in PreTOM.</strong></p>
+    <table style="margin-top:10px">
+      <tr><th>Window</th><th>Crash Day Share</th><th>Calendar Share</th><th>z-stat</th></tr>
+      <tr><td>PreTOM [T-9, T-4]</td><td>30.8%</td><td>33.3%</td><td>-1.32 (insignificant)</td></tr>
+      <tr><td>Month-start [T+1, T+3]</td><td class="sig">Significantly higher</td><td>—</td><td>Significant</td></tr>
+    </table>
+    <p style="margin-top:10px"><strong>Profit window and crash window are temporally separated — PreTOM profits are NOT compensation for crash risk.</strong></p>
+  </div>
+
+  <h3>8. Global Validation Across 19 Markets + Japan Counter-Evidence</h3>
+  <div class="card">
+    <p>The paper replicates across 19 developed markets (Compustat Global, 1990-2025). With country fixed effects:</p>
+    <ul style="padding-left:18px;margin-top:10px">
+      <li>Losers underperform by <strong>4.48 bps/day</strong> more during PreTOM (t = -4.46)</li>
+      <li>Winners show no significant difference</li>
+      <li>Strongest in <strong>Norway</strong> (-11.37 bps), <strong>Netherlands</strong> (-10.57 bps), <strong>Hong Kong</strong> (-8.94 bps)</li>
+    </ul>
+    <p style="margin-top:12px"><strong>The sole exception is Japan.</strong> In Japan, past losers tend to rebound and past winners tend to fall — the momentum factor is persistently negative. Since Japan's momentum direction is reversed, losers performing slightly better in PreTOM <strong>actually confirms the same mechanism from the opposite side</strong>.</p>
+  </div>
 </div>
 
 <div class="section">
@@ -164,7 +208,16 @@
     <li style="margin-bottom:12px"><strong>Pulse-shaped selling</strong> concentrated on T-6 and T-5, not gradual as in the US. Linked to A-share T+1 settlement.</li>
     <li style="margin-bottom:12px"><strong>T+1 rebound is beta, not alpha.</strong> Winners rebound more than losers — a market-wide month-end effect.</li>
     <li style="margin-bottom:12px"><strong>Practical implication:</strong> Avoid holding losers on days T-6/T-5; potential short-term rebound opportunity after PreTOM (from T-3 onward).</li>
+    <li style="margin-bottom:12px"><strong>Crashes and profits are separated</strong> — PreTOM profits are NOT tail-risk compensation.</li>
+    <li style="margin-bottom:12px"><strong>Validated across 19 markets globally</strong>; Japan confirms from the opposite side.</li>
   </ol></div>
+
+  <h3>Three Deeper Insights</h3>
+  <div class="card info">
+    <p><strong>First, momentum's "time address" has been precisely located.</strong> Traditionally we think of momentum as a monthly-frequency anomaly — past 12-month winners continue to outperform. But Nathan et al. show that monthly averages mask extreme intramonth concentration. If your portfolio happens to miss these six days each month (e.g., due to rebalancing timing), you may unknowingly forgo most of the momentum premium.</p>
+    <p style="margin-top:12px"><strong>Second, this finding completes the intramonth clock with the calendar effect.</strong> The first half of the post-month-end period (T-9 to T-4) is when losers are dumped and momentum profits; the turn-of-month (T-1 to T+3) is when the broad market dips then rebounds. Both stem from institutional month-end cash management, but operate differently: the former is a cross-sectional effect (losers vs winners), the latter a market-wide effect.</p>
+    <p style="margin-top:12px"><strong>Third, it redefines the "essence" of momentum.</strong> For three decades, momentum explanations oscillated between behavioral bias (investor underreaction) and risk compensation (bearing systematic risk). Nathan et al. propose a third possibility: momentum may simply be a byproduct of market microstructure — settlement mechanics, month-end payment obligations, and institutional cash management habits collectively shape the momentum returns we observe.</p>
+  </div>
 
   <blockquote>"You don't need to believe any narrative about investor irrationality or hidden risk premiums — you just need to believe one thing: fund managers need to raise cash at month-end."<br>
   <span style="font-style:normal;font-size:.85em;color:var(--muted)">— adapted from EarlETF</span></blockquote>
