@@ -5,7 +5,7 @@
   </p>
   <p align="center">
     <img src="https://img.shields.io/badge/license-CC--BY--NC--4.0-blue" alt="License">
-    <img src="https://img.shields.io/badge/studies-2-brightgreen" alt="Studies">
+    <img src="https://img.shields.io/badge/studies-3-brightgreen" alt="Studies">
     <img src="https://img.shields.io/badge/data-baostock-orange" alt="Data">
   </p>
 </p>
@@ -87,6 +87,41 @@ Every study is self-contained: backtest scripts, analysis charts, and bilingual 
 
 </details>
 
+<table>
+<tr>
+<td width="420">
+
+#### 03 — [Dividend ETF RSI Dual-Position](03-dividend-etf-rsi-dual/)
+
+**Source:** [IT阿伟量化投资博客](http://www.itawp.com/621.html)
+
+**Headline:** Single-asset timing strategy on Dividend ETF (510880) using annual MA deviation for position sizing and RSI for short-term swing capture.
+
+</td>
+<td>
+
+| Metric | Value | Benchmark (HS300) |
+|--------|:-----:|:-----------------:|
+| Annualized (w/ dividend) | **5%–9%** | ~3% |
+| Max Drawdown | **≤11%** | ~-25% |
+| Beta | **0.22** | 1.0 |
+| Win Rate (any entry) | **100%** | — |
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><strong>Key takeaways</strong></summary>
+
+- Dual-position: main (80%) uses annual MA deviation for value-based entry/exit; sub (20%) uses RSI oversold signals
+- Dividend reinvestment is critical — adds ~2%–3% annualized on top of price returns
+- Backtested across 5 different time windows, all positive returns regardless of entry point
+- Beta of 0.22 means near-zero correlation with broad market — true absolute return
+- Weakness: underperforms in rapid bull markets (e.g., 2019); requires patience with low trade frequency
+
+</details>
+
 ## Getting Started
 
 ```bash
@@ -117,6 +152,9 @@ quant-insights/
     ├── etf-rotation.html            ← English report
     ├── etf-rotation.zh.html         ← Chinese report
     └── strategy.md
+
+└── 03-dividend-etf-rsi-dual/       ← strategy design (single-asset timing)
+    └── study.zh.md                  ← Chinese report
 ```
 
 ---
