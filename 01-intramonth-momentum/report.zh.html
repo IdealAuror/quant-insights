@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股月内动量周期研究报告</title>
+<style>
+  :root {
+    --red: #c0392b; --red-light: #fde8e8;
+    --blue: #2471a3; --blue-light: #d6eaf8;
+    --green: #27ae60; --green-light: #e8fde8;
+    --purple: #8e44ad; --orange: #e67e22;
+    --bg: #fafbfc; --card: #ffffff; --text: #2c3e50; --muted: #7f8c8d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+  /* Hero */
+  .hero { text-align: center; padding: 60px 0 40px; }
+  .hero h1 { font-size: 2.4em; font-weight: 800; background: linear-gradient(135deg, var(--red), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero .subtitle { font-size: 1.15em; color: var(--muted); margin-top: 12px; }
+  .hero .meta { font-size: 0.9em; color: #aaa; margin-top: 8px; }
+
+  /* Section */
+  .section { margin: 48px 0; }
+  .section h2 { font-size: 1.5em; font-weight: 700; margin-bottom: 20px; padding-left: 14px; border-left: 4px solid var(--purple); }
+  .section h3 { font-size: 1.15em; font-weight: 600; margin: 24px 0 12px; color: var(--blue); }
+
+  /* Cards */
+  .card { background: var(--card); border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .card.highlight { border-left: 4px solid var(--red); }
+  .card.info { border-left: 4px solid var(--blue); }
+  .card.success { border-left: 4px solid var(--green); }
+
+  /* Key numbers */
+  .kpi-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 24px 0; }
+  .kpi { flex: 1; min-width: 140px; background: var(--card); border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .kpi .num { font-size: 2em; font-weight: 800; }
+  .kpi .label { font-size: 0.85em; color: var(--muted); margin-top: 4px; }
+  .kpi.red .num { color: var(--red); }
+  .kpi.blue .num { color: var(--blue); }
+  .kpi.purple .num { color: var(--purple); }
+  .kpi.green .num { color: var(--green); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95em; }
+  th { background: #f0f3f5; font-weight: 600; padding: 10px 12px; text-align: right; border-bottom: 2px solid #ddd; }
+  th:first-child { text-align: center; }
+  td { padding: 9px 12px; text-align: right; border-bottom: 1px solid #eee; }
+  td:first-child { text-align: center; font-weight: 600; }
+  tr:hover { background: #f8f9fa; }
+  .sig { color: var(--red); font-weight: 700; }
+  .positive { color: var(--green); }
+  .negative { color: var(--red); }
+
+  /* Images */
+  .img-wrap { text-align: center; margin: 24px 0; }
+  .img-wrap img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+  .img-wrap .caption { font-size: 0.85em; color: var(--muted); margin-top: 8px; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 32px; margin: 24px 0; }
+  .timeline::before { content: ''; position: absolute; left: 12px; top: 0; bottom: 0; width: 3px; background: linear-gradient(var(--red), var(--green)); border-radius: 2px; }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-item::before { content: ''; position: absolute; left: -26px; top: 6px; width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--purple); background: white; }
+  .tl-item.sell::before { border-color: var(--red); background: var(--red-light); }
+  .tl-item.rebound::before { border-color: var(--green); background: var(--green-light); }
+  .tl-item .tl-title { font-weight: 700; font-size: 1.05em; }
+  .tl-item .tl-desc { color: var(--muted); font-size: 0.92em; }
+
+  /* Blockquote */
+  blockquote { background: #f7f8fa; border-left: 4px solid var(--purple); padding: 16px 20px; margin: 16px 0; border-radius: 0 8px 8px 0; font-style: italic; color: #555; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 0 20px; color: #bbb; font-size: 0.85em; border-top: 1px solid #eee; margin-top: 60px; }
+
+  /* Comparison */
+  .compare { display: flex; gap: 16px; margin: 16px 0; }
+  .compare .col { flex: 1; padding: 16px; border-radius: 10px; }
+  .compare .col.us { background: var(--blue-light); }
+  .compare .col.cn { background: var(--red-light); }
+  .compare .col h4 { margin-bottom: 8px; }
+
+  @media (max-width: 600px) {
+    .kpi-row { flex-direction: column; }
+    .compare { flex-direction: column; }
+    .hero h1 { font-size: 1.6em; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ==================== HERO ==================== -->
+<div class="hero">
+  <h1>A股月内动量周期研究报告</h1>
+  <div class="subtitle">The Intramonth Momentum Cycle — A股市场实证检验</div>
+  <div class="meta">基于 baostock 数据 · 2016-2025 · 100只沪深A股 · 108个月 · 199,109条观测</div>
+</div>
+
+<!-- ==================== KPI ==================== -->
+<div class="kpi-row">
+  <div class="kpi red">
+    <div class="num">-45 bps</div>
+    <div class="label">T-6 输家单日跌幅</div>
+  </div>
+  <div class="kpi red">
+    <div class="num">70.4%</div>
+    <div class="label">PreTOM 动量收益占比</div>
+  </div>
+  <div class="kpi purple">
+    <div class="num">20.9 bps</div>
+    <div class="label">PreTOM WML 日均收益</div>
+  </div>
+  <div class="kpi green">
+    <div class="num">+47 bps</div>
+    <div class="label">T+1 输家反弹</div>
+  </div>
+</div>
+
+<!-- ==================== 研究背景 ==================== -->
+<div class="section">
+  <h2>研究背景</h2>
+  <div class="card info">
+    <p><strong>论文来源：</strong>Nathan, Suominen & Tasa (2026), <em>The Intramonth Momentum Cycle</em>, SSRN</p>
+    <p style="margin-top:10px;">论文发现美股动量因子 <strong>77% 的累计收益</strong> 集中在每月固定的 6 个交易日（月末倒数第 4-9 天，即 PreTOM 窗口）。驱动机制是机构投资者月末现金约束下的结算抛售——优先卖出"可弃置"的输家股。</p>
+    <p style="margin-top:10px;">本研究验证该规律是否在 A 股市场同样存在。</p>
+  </div>
+</div>
+
+<!-- ==================== 方法论 ==================== -->
+<div class="section">
+  <h2>研究方法</h2>
+  <div class="card">
+    <table>
+      <tr><th style="text-align:left">项目</th><th style="text-align:left">说明</th></tr>
+      <tr><td style="text-align:left">数据源</td><td style="text-align:left">baostock 后复权日线数据</td></tr>
+      <tr><td style="text-align:left">样本</td><td style="text-align:left">沪深 100 只主板+创业板股票（含沪深300成分股）</td></tr>
+      <tr><td style="text-align:left">区间</td><td style="text-align:left">2016-01-01 ~ 2025-12-31（10年）</td></tr>
+      <tr><td style="text-align:left">动量信号</td><td style="text-align:left">过去12个月收益，跳过最近1个月（Jegadeesh-Titman 经典定义）</td></tr>
+      <tr><td style="text-align:left">分组</td><td style="text-align:left">每月末按动量排序分10组（D1=输家，D10=赢家）</td></tr>
+      <tr><td style="text-align:left">PreTOM 窗口</td><td style="text-align:left">月末倒数第 4-9 个交易日 [T-9, T-4]</td></tr>
+      <tr><td style="text-align:left">TOM 窗口</td><td style="text-align:left">月末到月初 [T-1, T+3]</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== 核心发现 ==================== -->
+<div class="section">
+  <h2>核心发现</h2>
+
+  <h3>1. PreTOM 窗口贡献了 70% 的动量收益</h3>
+  <div class="card highlight">
+    <table>
+      <tr><th>指标</th><th>PreTOM [T-9,T-4]</th><th>其余交易日</th><th>t 值</th><th>p 值</th></tr>
+      <tr><td>输家 (D1)</td><td class="negative">-9.88 bps</td><td class="positive">+6.06 bps</td><td>-4.17</td><td class="sig">&lt;0.0001</td></tr>
+      <tr><td>赢家 (D10)</td><td>+11.05 bps</td><td>+10.03 bps</td><td>0.24</td><td>0.81</td></tr>
+      <tr><td>WML (10-1)</td><td class="positive">+20.89 bps</td><td>+3.87 bps</td><td>2.04</td><td class="sig">0.04</td></tr>
+    </table>
+    <p style="margin-top:12px; color:var(--muted);">输家在 PreTOM 期间每天跑输市场近 10bps，统计极其显著。赢家无显著差异。效应完全由输家驱动。</p>
+  </div>
+
+  <div class="img-wrap">
+    <img src="intramonth_result.png" alt="回测总览">
+    <div class="caption">图1：动量多空组合按月内日分布 / PreTOM各分位收益 / 三窗口对比 / 累计净值</div>
+  </div>
+
+  <h3>2. 抛压集中在 T-6 和 T-5 两天</h3>
+  <div class="card highlight">
+    <table>
+      <tr><th>交易日</th><th>输家 (bps)</th><th>赢家 (bps)</th><th>WML (bps)</th><th>输家 t 值</th><th>显著性</th></tr>
+      <tr><td>T-6</td><td class="negative">-45.36</td><td class="negative">-27.66</td><td class="positive">+16.22</td><td>-6.22</td><td class="sig">***</td></tr>
+      <tr><td>T-5</td><td class="negative">-30.04</td><td>-7.09</td><td class="positive">+22.98</td><td>-4.28</td><td class="sig">***</td></tr>
+      <tr><td>T-4</td><td class="positive">+18.13</td><td class="positive">+42.54</td><td class="positive">+24.95</td><td>+1.37</td><td></td></tr>
+      <tr><td>T-3</td><td class="positive">+9.40</td><td class="positive">+20.43</td><td class="positive">+10.31</td><td>+0.34</td><td></td></tr>
+      <tr><td>T-2</td><td class="positive">+20.22</td><td class="positive">+32.27</td><td class="positive">+12.50</td><td>+1.51</td><td></td></tr>
+      <tr><td>T-1</td><td class="negative">-12.32</td><td>-2.34</td><td class="positive">+10.18</td><td>-1.92</td><td></td></tr>
+      <tr><td>T+1</td><td class="positive">+46.96</td><td class="positive">+56.51</td><td class="positive">+9.05</td><td>+3.26</td><td class="sig">**</td></tr>
+      <tr><td>T+2</td><td class="negative">-60.44</td><td class="negative">-71.07</td><td class="negative">-9.91</td><td>-3.59</td><td class="sig">***</td></tr>
+    </table>
+    <p style="margin-top:12px; color:var(--muted);">A股的 PreTOM 抛售是<strong>脉冲式的</strong>（T-6/T-5 集中爆发），而非美股的渐进式。T-6/T-5 两天贡献了输家全部超额负收益的 121%。</p>
+  </div>
+
+  <div class="img-wrap">
+    <img src="pretom_daily.png" alt="PreTOM逐日">
+    <div class="caption">图2：PreTOM 窗口逐日输家/赢家/WML 收益</div>
+  </div>
+
+  <h3>3. T+1 全市场反弹，但不是输家专属</h3>
+  <div class="card success">
+    <p>T+1 输家反弹 +47bps（t=3.26），赢家反弹 +56bps（t=3.45）。<strong>赢家涨得更多</strong>，说明 T+1 是市场级别的月末效应（beta），而非输家压力释放后的专属修复（alpha）。</p>
+    <p style="margin-top:8px;">T+2 全市场回吐：输家 -60bps，赢家 -71bps。</p>
+  </div>
+
+  <div class="img-wrap">
+    <img src="full_cycle.png" alt="完整周期">
+    <div class="caption">图3：T-6 到 T+5 完整周期逐日收益（红=PreTOM区间，绿=TOM区间）</div>
+  </div>
+
+  <h3>4. 累积收益曲线</h3>
+  <div class="card">
+    <p>输家在 T-6/T-5 断崖式下跌（两天跌约 75bps），T+1 弹回约 47bps，但到 T+5 仍低于起点——PreTOM 的抛售伤害<strong>未被完全修复</strong>。WML 在 PreTOM 区间持续走高，T+1 后趋平。</p>
+  </div>
+
+  <div class="img-wrap">
+    <img src="cumulative_curve.png" alt="累积曲线">
+    <div class="caption">图4：输家/赢家分组累积收益 + WML 累积曲线</div>
+  </div>
+</div>
+
+<!-- ==================== 月内时钟 ==================== -->
+<div class="section">
+  <h2>A股月内时钟</h2>
+  <div class="card">
+    <div class="timeline">
+      <div class="tl-item sell">
+        <div class="tl-title">T-6 / T-5 · 输家被集中抛售</div>
+        <div class="tl-desc">公募基金月末现金约束驱动，优先卖出亏损股。输家两天跌 75bps，赢家也受波及但幅度小。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">T-4 ~ T-2 · 市场修复</div>
+        <div class="tl-desc">抛售压力消退，输家和赢家均有正收益。输家略有反弹但不显著。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">T-1 · 月末最后交易日</div>
+        <div class="tl-desc">市场略偏弱，为 T+1 反弹蓄势。</div>
+      </div>
+      <div class="tl-item rebound">
+        <div class="tl-title">T+1 · 全市场月末反弹</div>
+        <div class="tl-desc">输家 +47bps，赢家 +56bps。市场级别的 beta 效应，非输家专属。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">T+2 · 反弹回吐</div>
+        <div class="tl-desc">T+1 的涨幅被全部吐回，输家 -60bps，赢家 -71bps。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 中美对比 ==================== -->
+<div class="section">
+  <h2>中美市场对比</h2>
+  <div class="compare">
+    <div class="col us">
+      <h4>美股（论文结论）</h4>
+      <ul style="padding-left:18px; margin-top:8px;">
+        <li>PreTOM 贡献 <strong>77%</strong> 动量收益</li>
+        <li>输家每天跑输 <strong>-9.5 bps</strong></li>
+        <li>抛压从 T-9 到 T-4 <strong>渐进式</strong>增强</li>
+        <li>机制：T+2 结算制度 + 月末赎回</li>
+        <li>崩盘发生在月初，不在 PreTOM</li>
+      </ul>
+    </div>
+    <div class="col cn">
+      <h4>A股（本研究）</h4>
+      <ul style="padding-left:18px; margin-top:8px;">
+        <li>PreTOM 贡献 <strong>70%</strong> 动量收益</li>
+        <li>输家每天跑输 <strong>-9.9 bps</strong></li>
+        <li>抛压集中在 T-6/T-5 <strong>脉冲式</strong></li>
+        <li>机制：T+1 结算 + 公募月末赎回</li>
+        <li>T+1 反弹后 T+2 全市场回吐</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <p><strong>关键差异：</strong>A股的 T+1 交易/结算制度使得抛售窗口比美股（原 T+2）更窄，所以不是渐进式而是集中在两天内完成。但效应强度和方向高度一致——都由输家驱动，赢家无显著差异。</p>
+  </div>
+</div>
+
+<!-- ==================== 结论 ==================== -->
+<div class="section">
+  <h2>结论与启示</h2>
+  <div class="card highlight">
+    <ol style="padding-left: 20px;">
+      <li style="margin-bottom:12px;"><strong>A股存在月内动量周期效应</strong>，与美股论文结论高度一致。PreTOM 窗口贡献了 70% 的动量多空收益。</li>
+      <li style="margin-bottom:12px;"><strong>效应完全由输家驱动</strong>。赢家在 PreTOM 无显著异常，WML 的波动来自输家的定向抛售。</li>
+      <li style="margin-bottom:12px;"><strong>A股的抛售是脉冲式的</strong>，集中在 T-6 和 T-5 两天，而非美股的渐进式。这与 A 股 T+1 结算制度有关。</li>
+      <li style="margin-bottom:12px;"><strong>T+1 反弹是市场效应</strong>（beta），不是输家专属修复（alpha）。赢家反弹幅度更大。</li>
+      <li style="margin-bottom:12px;"><strong>实际意义</strong>：避免在月末倒数第 5-6 天持有输家股；PreTOM 结束后（T-3 起）输家可能出现短期反弹机会。</li>
+    </ol>
+  </div>
+
+  <blockquote>
+    "你不必信仰任何关于投资者非理性或隐含风险的叙事，你只需要相信一件事——基金经理每月末都需要凑钱交账。"<br>
+    <span style="font-style:normal; font-size:0.85em; color:var(--muted);">—— 张翼轸Earl, EarlETF</span>
+  </blockquote>
+</div>
+
+<!-- ==================== 文件清单 ==================== -->
+<div class="section">
+  <h2>项目文件</h2>
+  <div class="card">
+    <table>
+      <tr><th style="text-align:left">文件</th><th style="text-align:left">说明</th></tr>
+      <tr><td style="text-align:left"><code>intramonth_momentum.py</code></td><td style="text-align:left">主回测脚本（动量分组 + PreTOM 分析 + 统计检验 + 四图）</td></tr>
+      <tr><td style="text-align:left"><code>pretom_daily_v2.py</code></td><td style="text-align:left">PreTOM 逐日拆解（T-9 ~ T-4 每天输家收益）</td></tr>
+      <tr><td style="text-align:left"><code>posttom_daily.py</code></td><td style="text-align:left">PostTOM 逐日拆解（T-3 ~ T+3 每天收益）</td></tr>
+      <tr><td style="text-align:left"><code>tom_daily.py</code></td><td style="text-align:left">TOM 逐日拆解（T-2 ~ T+5 每天收益）</td></tr>
+      <tr><td style="text-align:left"><code>full_cycle.py</code></td><td style="text-align:left">完整周期图（T-6 ~ T+5 三图合一）</td></tr>
+      <tr><td style="text-align:left"><code>cumulative_curve.py</code></td><td style="text-align:left">累积收益曲线（输家/赢家/WML 分组累积）</td></tr>
+      <tr><td style="text-align:left"><code>*.png</code></td><td style="text-align:left">对应的分析图表</td></tr>
+      <tr><td style="text-align:left"><code>report.html</code></td><td style="text-align:left">本综合报告</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== 参考文献 ==================== -->
+<div class="section">
+  <h2>参考文献</h2>
+  <div class="card" style="font-size:0.9em; color:#555;">
+    <ol style="padding-left:20px;">
+      <li>Nathan, D., Suominen, M., & Tasa, J. (2026). <em>The Intramonth Momentum Cycle</em>. SSRN.</li>
+      <li>Etula, E., Rinne, K., Suominen, M., & Vaittinen, L. (2020). Dash for Cash: Monthly Market Impact of Institutional Liquidity Needs. <em>Review of Financial Studies</em>, 33(1), 75-111.</li>
+      <li>Jegadeesh, N., & Titman, S. (1993). Returns to Buying Winners and Selling Losers. <em>Journal of Finance</em>, 48(1), 65-91.</li>
+      <li>Daniel, K., & Moskowitz, T. J. (2016). Momentum Crashes. <em>Journal of Financial Economics</em>, 122(2), 221-247.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="footer">
+  Generated on 2026-06-25 · Data: baostock · Python + pandas + matplotlib + scipy
+</div>
+
+</div>
+</body>
+</html>
