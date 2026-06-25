@@ -5,7 +5,7 @@
   </p>
   <p align="center">
     <img src="https://img.shields.io/badge/license-CC--BY--NC--4.0-blue" alt="License">
-    <img src="https://img.shields.io/badge/studies-3-brightgreen" alt="Studies">
+    <img src="https://img.shields.io/badge/studies-4-brightgreen" alt="Studies">
     <img src="https://img.shields.io/badge/data-baostock-orange" alt="Data">
   </p>
 </p>
@@ -122,6 +122,41 @@ Every study is self-contained: backtest scripts, analysis charts, and bilingual 
 
 </details>
 
+<table>
+<tr>
+<td width="420">
+
+#### 04 — [PE-Anchored Dual Strategy](04-pe-anchored-dual/)
+
+**Type:** Original strategy design (non-paper)
+
+**Headline:** Dual-asset timing strategy using CSI 300 absolute PE as position anchor — full position when undervalued, light when overvalued — with momentum tilt between Dividend ETF and ChiNext ETF.
+
+</td>
+<td>
+
+| Metric | Strategy | Benchmark (HS300) |
+|--------|:--------:|:-----------------:|
+| Total Return | **+150.6%** | +57.7% |
+| Max Drawdown | **−26.2%** | ~−39% |
+| Beta | **0.82** | 1.0 |
+| Alpha | **+0.08** | — |
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><strong>Key takeaways</strong></summary>
+
+- Three-layer architecture: PE valuation anchor (CSI 300 PE < 13 → 95% position; PE > 17 → 30%) → momentum tilt (winner gets 60% capital) → dual-pool independent risk control
+- Asymmetric Alpha: only −8% in 2022 bear market (benchmark −21%), +25% in 2024 924 rally (PE=12.8 triggered full position)
+- Sample-split validation: outperformance in validation set (2022–2026) is *higher* than training set (2019–2021) — no overfitting
+- Return attribution: Beta contribution 47%, Alpha (timing + grid + momentum tilt) contributes the remaining 103%
+- Risk: −26% max drawdown may be too high for conservative investors; PE thresholds need recalibration if interest rate regime shifts
+
+</details>
+
 ## Getting Started
 
 ```bash
@@ -140,6 +175,7 @@ quant-insights/
 ├── 01-intramonth-momentum/          ← factor study (momentum timing)
 │   ├── momentum-cycle.html          ← English report
 │   ├── momentum-cycle.zh.html       ← Chinese report
+│   ├── study.zh.md
 │   ├── intramonth_momentum.py
 │   ├── pretom_daily_v2.py
 │   ├── posttom_daily.py
@@ -148,13 +184,19 @@ quant-insights/
 │   ├── cumulative_curve.py
 │   └── *.png
 │
-└── 02-four-pillar-etf-rotation/     ← strategy design (asset rotation)
-    ├── etf-rotation.html            ← English report
-    ├── etf-rotation.zh.html         ← Chinese report
-    └── strategy.md
-
-└── 03-dividend-etf-rsi-dual/       ← strategy design (single-asset timing)
-    └── study.zh.md                  ← Chinese report
+├── 02-four-pillar-etf-rotation/     ← strategy design (asset rotation)
+│   ├── etf-rotation.html            ← English report
+│   ├── etf-rotation.zh.html         ← Chinese report
+│   └── strategy.md
+│
+├── 03-dividend-etf-rsi-dual/        ← strategy design (single-asset timing)
+│   ├── dividend-rsi.zh.html         ← Chinese report
+│   └── study.zh.md
+│
+└── 04-pe-anchored-dual/             ← strategy design (PE-anchored dual asset)
+    ├── pe-anchored-dual.zh.html     ← Chinese report
+    ├── study.zh.md
+    └── pe_anchored_dual.py
 ```
 
 ---
