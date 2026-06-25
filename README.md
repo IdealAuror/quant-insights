@@ -5,7 +5,7 @@
   </p>
   <p align="center">
     <img src="https://img.shields.io/badge/license-CC--BY--NC--4.0-blue" alt="License">
-    <img src="https://img.shields.io/badge/studies-1-brightgreen" alt="Studies">
+    <img src="https://img.shields.io/badge/studies-2-brightgreen" alt="Studies">
     <img src="https://img.shields.io/badge/data-baostock-orange" alt="Data">
   </p>
 </p>
@@ -52,13 +52,48 @@ Every study is self-contained: backtest scripts, analysis charts, and a visual H
 
 </details>
 
+<table>
+<tr>
+<td width="420">
+
+#### 02 — [ETF Mean-Reversion Rotation](02-etf-mean-reversion/)
+
+**Type:** Original strategy design (non-paper)
+
+**Headline:** A four-asset ETF rotation strategy using short-term vs long-term deviation to harvest mean-reversion across A-share, US equity, gold, and bonds.
+
+</td>
+<td>
+
+| Metric | Value | Benchmark (HS300) |
+|--------|:-----:|:-----------------:|
+| Total Return | **+92.7%** | ~+30% |
+| Max Drawdown | **−8.2%** | ~−25% |
+| Sharpe Ratio | **0.85** | — |
+| Beta | **0.25** | 1.0 |
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><strong>Key takeaways</strong></summary>
+
+- Four low-correlation ETFs: Dividend Low-Vol (512890), Nasdaq 100 (513100), Gold (518880), 10Y Bond (511260)
+- Core logic: overweight assets with negative deviation (underperforming their long-term average), underweight those with positive deviation
+- Stress-tested across 5 parameter sets — returns locked in 87%–93% range, max drawdown never exceeded −10%
+- Base weight parameter is mathematically proven to have zero impact on final allocation (as long as no asset hits the 15% floor)
+- Weakness: underperforms in sustained one-directional trends (e.g., 2023 AI-driven Nasdaq rally)
+
+</details>
+
 ## Getting Started
 
 ```bash
 pip install baostock pandas numpy matplotlib scipy pyarrow
 ```
 
-Each folder contains a `report.html` — open it in your browser for the full visual report.
+Each folder contains a `report.html` or `strategy.md` — open it in your browser for the full visual report.
 
 ## Repository Layout
 
@@ -67,15 +102,18 @@ quant-insights/
 ├── README.md
 ├── LICENSE                        ← CC BY-NC 4.0 (non-commercial)
 │
-└── 01-intramonth-momentum/
-    ├── report.html                ← visual report (open in browser)
-    ├── intramonth_momentum.py     ← main backtest engine
-    ├── pretom_daily_v2.py         ← PreTOM daily decomposition
-    ├── posttom_daily.py           ← PostTOM daily decomposition
-    ├── tom_daily.py               ← turn-of-month daily view
-    ├── full_cycle.py              ← T−6 → T+5 overview chart
-    ├── cumulative_curve.py        ← cumulative return curves
-    └── *.png                      ← rendered charts
+├── 01-intramonth-momentum/        ← factor study (momentum timing)
+│   ├── report.html
+│   ├── intramonth_momentum.py
+│   ├── pretom_daily_v2.py
+│   ├── posttom_daily.py
+│   ├── tom_daily.py
+│   ├── full_cycle.py
+│   ├── cumulative_curve.py
+│   └── *.png
+│
+└── 02-etf-mean-reversion/         ← strategy design (asset rotation)
+    └── strategy.md
 ```
 
 ---
