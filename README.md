@@ -14,7 +14,7 @@
 
 A curated collection of quantitative research case studies. Each study replicates a published paper against A-share market data, distilling the original findings and testing whether they hold in China's equity market.
 
-Every study is self-contained: backtest scripts, analysis charts, and a visual HTML report.
+Every study is self-contained: backtest scripts, analysis charts, and bilingual HTML reports.
 
 ## Studies
 
@@ -22,7 +22,7 @@ Every study is self-contained: backtest scripts, analysis charts, and a visual H
 <tr>
 <td width="420">
 
-#### 01 — [PreTOM Momentum Crush](01-pretom-momentum-crush/)
+#### 01 — [Intramonth Momentum Cycle](01-intramonth-momentum/)
 
 **Paper:** Nathan, Suominen & Tasa (2026) — *The Intramonth Momentum Cycle* (SSRN)
 
@@ -93,17 +93,18 @@ Every study is self-contained: backtest scripts, analysis charts, and a visual H
 pip install baostock pandas numpy matplotlib scipy pyarrow
 ```
 
-Each folder contains `report.html` (English) and `report.zh.html` (Chinese) — open in your browser for the full visual report.
+Each folder contains `*.html` study reports in English and Chinese — open in your browser.
 
 ## Repository Layout
 
 ```
 quant-insights/
 ├── README.md
-├── LICENSE                        ← CC BY-NC 4.0 (non-commercial)
+├── LICENSE                          ← CC BY-NC 4.0 (non-commercial)
 │
-├── 01-pretom-momentum-crush/      ← factor study (momentum timing)
-│   ├── report.html / report.zh.html
+├── 01-intramonth-momentum/          ← factor study (momentum timing)
+│   ├── momentum-cycle.html          ← English report
+│   ├── momentum-cycle.zh.html       ← Chinese report
 │   ├── intramonth_momentum.py
 │   ├── pretom_daily_v2.py
 │   ├── posttom_daily.py
@@ -112,8 +113,9 @@ quant-insights/
 │   ├── cumulative_curve.py
 │   └── *.png
 │
-└── 02-four-pillar-etf-rotation/   ← strategy design (asset rotation)
-    ├── report.html / report.zh.html
+└── 02-four-pillar-etf-rotation/     ← strategy design (asset rotation)
+    ├── etf-rotation.html            ← English report
+    ├── etf-rotation.zh.html         ← Chinese report
     └── strategy.md
 ```
 
