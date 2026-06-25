@@ -1,3 +1,5 @@
+[English](./README.md) | [中文](./README-zh.md)
+
 <p align="center">
   <h1 align="center">📐 quant-insights</h1>
   <p align="center">
