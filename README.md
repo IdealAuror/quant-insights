@@ -1,4 +1,4 @@
-<p align="center">[English](./README.md) | [中文](./README-zh.md)</p>
+<p align="center"><a href="./README.md">English</a> | <a href="./README-zh.md">中文</a></p>
 
 <p align="center">
   <h1 align="center">📐 quant-insights</h1>

@@ -5,7 +5,7 @@
   </p>
 </p>
 
-<p align="center">[English](./README.md) | [中文](./README-zh.md)</p>
+<p align="center"><a href="./README.md">English</a> | <a href="./README-zh.md">中文</a></p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-CC--BY--NC--4.0-blue" alt="License">
