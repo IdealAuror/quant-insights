@@ -22,7 +22,7 @@ Every study is self-contained: backtest scripts, analysis charts, and a visual H
 <tr>
 <td width="420">
 
-#### 01 — [Intramonth Momentum Cycle](01-intramonth-momentum/)
+#### 01 — [PreTOM Momentum Crush](01-pretom-momentum-crush/)
 
 **Paper:** Nathan, Suominen & Tasa (2026) — *The Intramonth Momentum Cycle* (SSRN)
 
@@ -56,7 +56,7 @@ Every study is self-contained: backtest scripts, analysis charts, and a visual H
 <tr>
 <td width="420">
 
-#### 02 — [ETF Mean-Reversion Rotation](02-etf-mean-reversion/)
+#### 02 — [Four-Pillar ETF Rotation](02-four-pillar-etf-rotation/)
 
 **Type:** Original strategy design (non-paper)
 
@@ -93,7 +93,7 @@ Every study is self-contained: backtest scripts, analysis charts, and a visual H
 pip install baostock pandas numpy matplotlib scipy pyarrow
 ```
 
-Each folder contains a `report.html` or `strategy.md` — open it in your browser for the full visual report.
+Each folder contains `report.html` (English) and `report.zh.html` (Chinese) — open in your browser for the full visual report.
 
 ## Repository Layout
 
@@ -102,8 +102,8 @@ quant-insights/
 ├── README.md
 ├── LICENSE                        ← CC BY-NC 4.0 (non-commercial)
 │
-├── 01-intramonth-momentum/        ← factor study (momentum timing)
-│   ├── report.html
+├── 01-pretom-momentum-crush/      ← factor study (momentum timing)
+│   ├── report.html / report.zh.html
 │   ├── intramonth_momentum.py
 │   ├── pretom_daily_v2.py
 │   ├── posttom_daily.py
@@ -112,7 +112,8 @@ quant-insights/
 │   ├── cumulative_curve.py
 │   └── *.png
 │
-└── 02-etf-mean-reversion/         ← strategy design (asset rotation)
+└── 02-four-pillar-etf-rotation/   ← strategy design (asset rotation)
+    ├── report.html / report.zh.html
     └── strategy.md
 ```
 
