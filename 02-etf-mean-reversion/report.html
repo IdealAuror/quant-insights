@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ETF Mean-Reversion Rotation Strategy</title>
+<title>ETF均值回归轮动策略</title>
 <style>
   :root {
     --gold: #d4a017; --gold-light: #fef9e7;
@@ -90,181 +90,181 @@
 <body>
 <div class="container">
 
-<!-- HERO -->
+<!-- 标题 -->
 <div class="hero">
-  <h1>ETF Mean-Reversion Rotation</h1>
-  <div class="subtitle">Four-Asset Dynamic Allocation via Short-Long Term Deviation</div>
+  <h1>ETF均值回归轮动策略</h1>
+  <div class="subtitle">基于短期-长期偏离度的四资产动态配置</div>
   <div style="margin-top:12px;">
-    <span style="display:inline-block;background:#fef9e7;color:#d4a017;padding:4px 12px;border-radius:20px;font-size:0.85em;font-weight:600;">Strategy Design</span>
-    <span style="display:inline-block;background:#e8fde8;color:#27ae60;padding:4px 12px;border-radius:20px;font-size:0.85em;font-weight:600;margin-left:6px;">No Overfitting</span>
-    <span style="display:inline-block;background:#d6eaf8;color:#2471a3;padding:4px 12px;border-radius:20px;font-size:0.85em;font-weight:600;margin-left:6px;">JoinQuant Backtest 2019-2026</span>
+    <span style="display:inline-block;background:#fef9e7;color:#d4a017;padding:4px 12px;border-radius:20px;font-size:0.85em;font-weight:600;">策略设计</span>
+    <span style="display:inline-block;background:#e8fde8;color:#27ae60;padding:4px 12px;border-radius:20px;font-size:0.85em;font-weight:600;margin-left:6px;">无过拟合</span>
+    <span style="display:inline-block;background:#d6eaf8;color:#2471a3;padding:4px 12px;border-radius:20px;font-size:0.85em;font-weight:600;margin-left:6px;">聚宽回测 2019-2026</span>
   </div>
 </div>
 
-<!-- KPI -->
+<!-- 核心指标 -->
 <div class="kpi-row">
-  <div class="kpi gold"><div class="num">+92.7%</div><div class="label">Total Return (7yr)</div></div>
-  <div class="kpi green"><div class="num">-8.2%</div><div class="label">Max Drawdown</div></div>
-  <div class="kpi blue"><div class="num">0.85</div><div class="label">Sharpe Ratio</div></div>
-  <div class="kpi purple"><div class="num">0.25</div><div class="label">Beta to HS300</div></div>
+  <div class="kpi gold"><div class="num">+92.7%</div><div class="label">总收益率（7年）</div></div>
+  <div class="kpi green"><div class="num">-8.2%</div><div class="label">最大回撤</div></div>
+  <div class="kpi blue"><div class="num">0.85</div><div class="label">夏普比率</div></div>
+  <div class="kpi purple"><div class="num">0.25</div><div class="label">Beta（沪深300）</div></div>
 </div>
 
-<!-- OVERVIEW -->
+<!-- 策略概述 -->
 <div class="section">
-  <h2>Strategy Overview</h2>
+  <h2>策略概述</h2>
   <div class="card highlight">
-    <p>A <strong>mean-reversion</strong> asset rotation strategy across four low-correlation ETFs. When an asset's short-term return significantly exceeds its long-term quarterly average, the strategy underweights it (expecting reversion); when it underperforms, the strategy overweights it.</p>
-    <p style="margin-top:10px; color:var(--muted);">Rebalanced weekly. No market timing. No stock selection. Pure asset allocation driven by a single deviation formula.</p>
+    <p>一套基于<strong>均值回归</strong>理念的四资产轮动策略。当某资产短期收益显著超过长期季度均值时减仓（预期回调），反之加仓（预期反弹）。</p>
+    <p style="margin-top:10px; color:var(--muted);">每周调仓一次。不择时、不选股，纯资产配置驱动，核心逻辑只有一个偏离度公式。</p>
   </div>
 
-  <h3>Core Universe — The "Four Pillars"</h3>
+  <h3>投资标的 —— "老四样"</h3>
   <div class="asset-grid">
     <div class="asset-card">
       <div class="ticker">512890</div>
-      <div class="name">Dividend Low-Vol ETF</div>
-      <div class="role">A-share Value · Stable Income</div>
+      <div class="name">红利低波ETF</div>
+      <div class="role">A股价值 · 稳健收益</div>
     </div>
     <div class="asset-card">
       <div class="ticker">513100</div>
-      <div class="name">Nasdaq 100 ETF</div>
-      <div class="role">US Growth · Tech Exposure</div>
+      <div class="name">纳斯达克100ETF</div>
+      <div class="role">美股成长 · 科技红利</div>
     </div>
     <div class="asset-card">
       <div class="ticker">518880</div>
-      <div class="name">Gold ETF</div>
-      <div class="role">Commodity · Inflation Hedge</div>
+      <div class="name">黄金ETF</div>
+      <div class="role">大宗商品 · 抗通胀</div>
     </div>
     <div class="asset-card">
       <div class="ticker">511260</div>
-      <div class="name">10Y Treasury ETF</div>
-      <div class="role">Fixed Income · Ballast</div>
+      <div class="name">10年国债ETF</div>
+      <div class="role">固收压舱 · 平滑波动</div>
     </div>
   </div>
 </div>
 
-<!-- CORE LOGIC -->
+<!-- 核心逻辑 -->
 <div class="section">
-  <h2>Core Logic</h2>
+  <h2>核心逻辑</h2>
   <div class="card">
 
-    <h3>Step 1 — Compute Deviation</h3>
+    <h3>第一步 — 计算偏离度</h3>
     <div class="formula-block">
-      <span class="comment">// Short-term return (~1 quarter, 63 trading days)</span><br>
+      <span class="comment">// 短期收益（约1个季度，63个交易日）</span><br>
       <span class="var">R_short</span> <span class="op">=</span> P<sub>t</sub> / P<sub>t-63</sub> - 1<br><br>
-      <span class="comment">// Long-term return (~5 quarters, 315 trading days)</span><br>
+      <span class="comment">// 长期收益（约5个季度，315个交易日）</span><br>
       <span class="var">R_long</span> <span class="op">=</span> P<sub>t</sub> / P<sub>t-315</sub> - 1<br><br>
-      <span class="comment">// Deviation = how much short-term deviates from long-term quarterly average</span><br>
+      <span class="comment">// 偏离度 = 短期收益 - 长期季度均值</span><br>
       <span class="var">Deviation</span> <span class="op">=</span> <span class="var">R_short</span> - <span class="var">R_long</span> / 5
     </div>
 
     <div class="flow-chart">
-      <div class="flow-step" style="background:var(--red-light);">Deviation &gt; 0<br><small>Overbought</small></div>
+      <div class="flow-step" style="background:var(--red-light);">偏离度 &gt; 0<br><small>超涨</small></div>
       <div class="flow-arrow">&rarr;</div>
-      <div class="flow-step" style="background:var(--red-light);">Reduce Weight</div>
+      <div class="flow-step" style="background:var(--red-light);">减仓</div>
       <div class="flow-arrow">&nbsp;&nbsp;&nbsp;</div>
-      <div class="flow-step" style="background:var(--green-light);">Deviation &lt; 0<br><small>Oversold</small></div>
+      <div class="flow-step" style="background:var(--green-light);">偏离度 &lt; 0<br><small>超跌</small></div>
       <div class="flow-arrow">&rarr;</div>
-      <div class="flow-step" style="background:var(--green-light);">Increase Weight</div>
+      <div class="flow-step" style="background:var(--green-light);">加仓</div>
     </div>
 
-    <h3>Step 2 — Generate Raw Weights</h3>
+    <h3>第二步 — 生成原始权重</h3>
     <div class="formula-block">
       <span class="var">Raw<sub>i</sub></span> <span class="op">=</span> Base - <span class="var">Deviation<sub>i</sub></span><br>
-      <span class="var">Raw<sub>i</sub></span> <span class="op">=</span> max(<span class="var">Raw<sub>i</sub></span>, 0.15) &nbsp;&nbsp;<span class="comment">// floor protection: never zero out any asset</span>
+      <span class="var">Raw<sub>i</sub></span> <span class="op">=</span> max(<span class="var">Raw<sub>i</sub></span>, 0.15) &nbsp;&nbsp;<span class="comment">// 下限保护，防止某资产被清仓</span>
     </div>
 
-    <h3>Step 3 — Normalize to Final Weights</h3>
+    <h3>第三步 — 归一化得到最终权重</h3>
     <div class="formula-block">
       <span class="var">Final<sub>i</sub></span> <span class="op">=</span> <span class="var">Raw<sub>i</sub></span> / &Sigma;<span class="var">Raw<sub>j</sub></span>
     </div>
 
-    <h3>Why Base Weight Doesn't Matter</h3>
+    <h3>为什么基准权重（Base）完全不影响结果？</h3>
     <div class="card info">
-      <p>Mathematically proven: when no asset hits the 15% floor, the final allocation ratio between any two assets <em>i</em> and <em>k</em> is:</p>
+      <p>数学证明：当没有任何资产触碰15%下限时，任意两只资产 <em>i</em> 和 <em>k</em> 的最终权重比为：</p>
       <div class="formula-block" style="text-align:center; font-size:1.05em;">
         Final<sub>i</sub> / Final<sub>k</sub> = (B - d<sub>i</sub>) / (B - d<sub>k</sub>)
       </div>
-      <p style="margin-top:8px;">Changing B shifts numerator and denominator equally — only the <strong>relative differences</strong> between deviations matter. The base weight parameter is mathematically irrelevant to the outcome.</p>
+      <p style="margin-top:8px;">调整 B 值时分子分母同步变化——最终只取决于偏离度之间的<strong>相对大小</strong>，与 Base 的绝对值无关。</p>
     </div>
   </div>
 </div>
 
-<!-- STRESS TEST -->
+<!-- 压力测试 -->
 <div class="section">
-  <h2>Stress Test — 5 Parameter Sets</h2>
+  <h2>过拟合压力测试 — 5组参数</h2>
   <div class="card">
-    <p style="color:var(--muted); margin-bottom:12px;">Backtest period: 2019-01-01 to 2026-06-01. Perturbing short window and base weight to test overfitting.</p>
+    <p style="color:var(--muted); margin-bottom:12px;">回测区间：2019-01-01 至 2026-06-01。对短期窗口和基准权重进行扰动，检验参数依赖性。</p>
     <table class="stress-table">
-      <tr><th>Case</th><th>Parameters</th><th class="right">Return</th><th class="right">Max DD</th><th class="right">Sharpe</th><th class="center">Verdict</th></tr>
-      <tr><td><strong>1</strong></td><td>Baseline (63d, B=0.40)</td><td class="right best"><strong>92.70%</strong></td><td class="right">-8.21%</td><td class="right">0.85</td><td class="center pass">Benchmark</td></tr>
-      <tr><td><strong>2</strong></td><td>Shorter window (40d)</td><td class="right">87.26%</td><td class="right">-9.70%</td><td class="right">0.78</td><td class="center pass">Pass</td></tr>
-      <tr><td><strong>3</strong></td><td>Longer window (80d)</td><td class="right best"><strong>91.58%</strong></td><td class="right best"><strong>-8.13%</strong></td><td class="right best"><strong>0.85</strong></td><td class="center pass">Best</td></tr>
-      <tr><td><strong>4</strong></td><td>Lower base (B=0.30)</td><td class="right">91.11%</td><td class="right best"><strong>-7.90%</strong></td><td class="right">0.83</td><td class="center pass">Best DD</td></tr>
-      <tr><td><strong>5</strong></td><td>Higher base (B=0.50)</td><td class="right">91.11%</td><td class="right">-7.90%</td><td class="right">0.83</td><td class="center pass">Immune</td></tr>
+      <tr><th>编号</th><th>参数</th><th class="right">总收益</th><th class="right">最大回撤</th><th class="right">夏普</th><th class="center">判定</th></tr>
+      <tr><td><strong>Case 1</strong></td><td>基准（63天, B=0.40）</td><td class="right best"><strong>92.70%</strong></td><td class="right">-8.21%</td><td class="right">0.85</td><td class="center pass">基准标杆</td></tr>
+      <tr><td><strong>Case 2</strong></td><td>窗口缩短（40天）</td><td class="right">87.26%</td><td class="right">-9.70%</td><td class="right">0.78</td><td class="center pass">通过</td></tr>
+      <tr><td><strong>Case 3</strong></td><td>窗口拉长（80天）</td><td class="right best"><strong>91.58%</strong></td><td class="right best"><strong>-8.13%</strong></td><td class="right best"><strong>0.85</strong></td><td class="center pass">最优</td></tr>
+      <tr><td><strong>Case 4</strong></td><td>基准降低（B=0.30）</td><td class="right">91.11%</td><td class="right best"><strong>-7.90%</strong></td><td class="right">0.83</td><td class="center pass">回撤最佳</td></tr>
+      <tr><td><strong>Case 5</strong></td><td>基准提高（B=0.50）</td><td class="right">91.11%</td><td class="right">-7.90%</td><td class="right">0.83</td><td class="center pass">参数免疫</td></tr>
     </table>
   </div>
 
   <div class="kpi-row">
-    <div class="kpi green"><div class="num">&lt; 6%</div><div class="label">Return Variance</div></div>
-    <div class="kpi green"><div class="num">&lt; 10%</div><div class="label">Max DD Ceiling</div></div>
-    <div class="kpi blue"><div class="num">0.25</div><div class="label">Beta Independence</div></div>
-    <div class="kpi gold"><div class="num">None</div><div class="label">Overfitting</div></div>
+    <div class="kpi green"><div class="num">&lt; 6%</div><div class="label">收益波动幅度</div></div>
+    <div class="kpi green"><div class="num">&lt; 10%</div><div class="label">回撤天花板</div></div>
+    <div class="kpi blue"><div class="num">0.25</div><div class="label">Beta独立性</div></div>
+    <div class="kpi gold"><div class="num">无</div><div class="label">过拟合</div></div>
   </div>
 
   <div class="card success">
-    <p><strong>Conclusion:</strong> Returns locked in a 87%–93% range across all parameter sets. Max drawdown never exceeded -10%. The strategy is <strong>not overfit</strong> — the math is parameter-immune by design.</p>
+    <p><strong>结论：</strong>无论参数怎么变，总收益死死咬在 87%–93% 的极窄区间，最大回撤从未突破 -10%。策略<strong>不存在过拟合</strong>，数学逻辑天然免疫参数选择。</p>
   </div>
 </div>
 
-<!-- PROS & CONS -->
+<!-- 优缺点 -->
 <div class="section">
-  <h2>Strengths & Weaknesses</h2>
+  <h2>优缺点分析</h2>
   <div class="pros-cons">
     <div class="col pros">
-      <h4 style="color:var(--green);">Strengths</h4>
+      <h4 style="color:var(--green);">优势</h4>
       <ul>
-        <li><strong>All-weather:</strong> A-shares, US equities, gold, bonds — at least one asset shines in any economic cycle</li>
-        <li><strong>Excellent hold experience:</strong> Max DD under 10%, easy to stick with through drawdowns</li>
-        <li><strong>Transparent logic:</strong> One formula, no black box, fully auditable</li>
-        <li><strong>High capacity:</strong> All four ETFs trade billions daily — no slippage concern up to tens of millions</li>
+        <li><strong>全天候适应：</strong>A股、美股、商品、债券四类资产对冲，任何经济周期都有表现突出的标的</li>
+        <li><strong>持有体验极佳：</strong>最大回撤控制在10%以内，适合作为资产配置底仓，拿得住才能赚到钱</li>
+        <li><strong>逻辑清晰透明：</strong>一个公式，无黑箱，投资者完全理解每一步操作</li>
+        <li><strong>容量大：</strong>四只ETF日均成交额均在数亿以上，千万级别资金基本无滑点</li>
       </ul>
     </div>
     <div class="col cons">
-      <h4 style="color:var(--red);">Weaknesses</h4>
+      <h4 style="color:var(--red);">风险</h4>
       <ul>
-        <li><strong>Trend FOMO:</strong> In sustained rallies (e.g., 2023 AI-driven Nasdaq), the strategy keeps reducing the winner and underperforms buy-and-hold</li>
-        <li><strong>Mean-reversion failure:</strong> In strong trending markets, the deviation signal fires the wrong way repeatedly</li>
-        <li><strong>No volatility targeting:</strong> Pure return-based deviation ignores risk — a volatile asset could be over-concentrated</li>
+        <li><strong>单边牛市踏空：</strong>遇到持续暴涨（如2023年AI浪潮），策略会不断减仓赢家，跑输买入持有</li>
+        <li><strong>趋势期失效：</strong>强趋势市场中均值回归假设不成立，策略持续发出错误的反向信号</li>
+        <li><strong>未纳入波动率：</strong>纯收益率偏离度调仓，没有考虑波动率，可能导致风险过度集中</li>
       </ul>
     </div>
   </div>
 </div>
 
-<!-- LIVE TRADING -->
+<!-- 实盘须知 -->
 <div class="section">
-  <h2>Live Trading Notes</h2>
+  <h2>实盘须知</h2>
   <div class="card">
     <table>
-      <tr><td style="width:160px;font-weight:600;">Recommended params</td><td>Case 3: short_window = 80, base = 0.40</td></tr>
-      <tr><td style="font-weight:600;">Rebalance</td><td>Weekly, Monday 09:45 open</td></tr>
-      <tr><td style="font-weight:600;">Capacity</td><td>Tens of millions RMB with minimal slippage</td></tr>
-      <tr><td style="font-weight:600;">Slippage sim</td><td><code>set_slippage(FixedSlippage(0.001))</code></td></tr>
-      <tr><td style="font-weight:600;">Start date</td><td>2019-01-01 (512890 listed Dec 2018)</td></tr>
+      <tr><td style="width:140px;font-weight:600;">推荐参数</td><td>Case 3：short_window = 80, base = 0.40</td></tr>
+      <tr><td style="font-weight:600;">调仓频率</td><td>每周一开盘 09:45</td></tr>
+      <tr><td style="font-weight:600;">资金容量</td><td>千万级别以内基本无滑点影响</td></tr>
+      <tr><td style="font-weight:600;">滑点模拟</td><td><code>set_slippage(FixedSlippage(0.001))</code></td></tr>
+      <tr><td style="font-weight:600;">回测起始</td><td>2019-01-01（512890于2018年12月上市）</td></tr>
     </table>
   </div>
 </div>
 
-<!-- CODE -->
+<!-- 回测代码 -->
 <div class="section">
-  <h2>Backtest Code (JoinQuant)</h2>
+  <h2>聚宽回测代码</h2>
   <div class="card" style="padding:0; overflow:hidden; border-radius:12px;">
     <div style="background:#2d2d2d; padding:10px 20px; display:flex; align-items:center;">
       <span style="color:#888; font-size:0.85em;">strategy.py</span>
     </div>
 <pre style="margin:0; border-radius:0; padding:20px; font-size:0.84em;">
-<span class="cmt"># ETF Mean-Reversion Rotation Strategy</span>
-<span class="cmt"># Universe: 512890 / 513100 / 518880 / 511260</span>
-<span class="cmt"># Backtest: 2019-01-01 to 2026-06-01</span>
+<span class="cmt"># ETF均值回归动态配置策略</span>
+<span class="cmt"># 标的：红利低波(512890) 纳指(513100) 黄金(518880) 国债(511260)</span>
+<span class="cmt"># 回测区间：2019-01-01 至 2026-06-01</span>
 
 <span class="kw">import</span> jqdata
 <span class="kw">import</span> pandas <span class="kw">as</span> pd
@@ -318,20 +318,20 @@ CONFIG = {
   </div>
 </div>
 
-<!-- REFERENCE -->
+<!-- 参考文献 -->
 <div class="section">
-  <h2>Reference</h2>
+  <h2>参考文献</h2>
   <div class="card" style="font-size:0.9em; color:#555;">
     <ul style="padding-left:18px;">
-      <li>Backtest platform: JoinQuant (聚宽)</li>
-      <li>Mean-reversion hypothesis: DeBondt & Thaler (1985), <em>Does the Stock Market Overreact?</em></li>
-      <li>Cross-asset rotation: Asness et al. (2013), <em>Value and Momentum Everywhere</em></li>
+      <li>回测平台：聚宽（JoinQuant）</li>
+      <li>均值回归假说：DeBondt & Thaler (1985), <em>Does the Stock Market Overreact?</em></li>
+      <li>跨资产轮动：Asness et al. (2013), <em>Value and Momentum Everywhere</em></li>
     </ul>
   </div>
 </div>
 
 <div class="footer">
-  Part of <a href="https://github.com/IdealAuror/quant-insights">quant-insights</a> · Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+  Part of <a href="https://github.com/IdealAuror/quant-insights">quant-insights</a> · <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a> 禁止商用
 </div>
 
 </div>
