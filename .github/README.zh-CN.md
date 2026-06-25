@@ -4,7 +4,6 @@
     <em>以 A 股市场为视角，复现学术研究中的量化洞察</em>
   </p>
   <p align="center">
-    <a href="README.md">🇺🇸 English</a>
     <br>
     <img src="https://img.shields.io/badge/license-CC--BY--NC--4.0-blue" alt="License">
     <img src="https://img.shields.io/badge/studies-1-brightgreen" alt="Studies">
@@ -67,7 +66,8 @@ pip install baostock pandas numpy matplotlib scipy pyarrow
 ```
 quant-insights/
 ├── README.md                      ← English version
-├── README.zh-CN.md
+├── .github/
+│   └── README.zh-CN.md            ← 中文版（GitHub 自动切换）
 ├── LICENSE                        ← CC BY-NC 4.0（禁止商用）
 │
 └── 01-intramonth-momentum/

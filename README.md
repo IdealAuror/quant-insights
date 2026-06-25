@@ -4,7 +4,6 @@
     <em>Replicating academic research through the lens of the A-share market</em>
   </p>
   <p align="center">
-    <a href="README.zh-CN.md">🇨🇳 中文</a>
     <br>
     <img src="https://img.shields.io/badge/license-CC--BY--NC--4.0-blue" alt="License">
     <img src="https://img.shields.io/badge/studies-1-brightgreen" alt="Studies">
@@ -67,7 +66,8 @@ Each folder contains a `report.html` — open it in your browser for the full vi
 ```
 quant-insights/
 ├── README.md
-├── README.zh-CN.md                ← 中文版
+├── .github/
+│   └── README.zh-CN.md            ← 中文版（GitHub auto-switch）
 ├── LICENSE                        ← CC BY-NC 4.0 (non-commercial)
 │
 └── 01-intramonth-momentum/
